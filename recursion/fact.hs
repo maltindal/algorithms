@@ -1,1 +1,1 @@
-fact n = product n
+fact n = product [1..n]
