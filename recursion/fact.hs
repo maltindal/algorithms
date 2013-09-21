@@ -1,3 +1,1 @@
-fact n 
-  | n > 0 = foldl (*) 1 [1..n]
-  | otherwise = 1
+fact n = foldl (*) 1 [1..n]
