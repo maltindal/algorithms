@@ -14,3 +14,14 @@ sieve n m ns
 
 prims [] = []
 prims (x:xs) = filter (/=0) (sieve x (x+x) (x:xs))
+
+-- calculates the distance between two pairs of primes
+-- expects a list of prime numbers
+distance ps = [ y-x | (x,y) <- zip ps (tail ps) ]
+
+-- given a list of numbers returns the max number
+max' xs = foldl (max ) (head xs) (tail xs)
+
+-- given a sequence of numbers calculate the max distance
+-- between two pairs of prime numbers 2..r
+maxdist rs = [max' (distance (sievem [2..x])) | x <- rs]
