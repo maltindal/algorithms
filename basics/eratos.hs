@@ -25,3 +25,6 @@ max' xs = foldl (max ) (head xs) (tail xs)
 -- given a sequence of numbers calculate the max distance
 -- between two pairs of prime numbers 2..r
 maxdist rs = [max' (distance (sievem [2..x])) | x <- rs]
+
+-- given a number check if it is prime
+isPrime x = null [y | y<-[2..floor (sqrt (fromIntegral x))], x `mod` y == 0]
