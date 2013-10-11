@@ -1,3 +1,8 @@
+import System.Random
+
+-- Sieve implementations
+------------------------
+
 -- This sieve uses mod. It's not the sieve of eratosthenes.
 sievem :: Integral a => [a] -> [a]
 sievem [] = []
@@ -18,8 +23,8 @@ prims :: [Int] -> [Int]
 prims [] = []
 prims (x:xs) = filter (/=0) (sieve x (x+x) (x:xs))
 
--- calculates the distance between two pairs of primes
--- expects a list of prime numbers
+-- given a list of prime numbers
+-- calculate the distance between two pairs of primes
 distance :: [Int] -> [Int]
 distance ps = [ y-x | (x,y) <- zip ps (tail ps) ]
 
@@ -32,6 +37,29 @@ max' xs = foldl (max ) (head xs) (tail xs)
 maxdist :: [Int] -> [Int]
 maxdist rs = [max' (distance (sievem [2..x])) | x <- rs]
 
--- given a number check if it is prime
-isPrime :: Int -> Bool
-isPrime x = null [y | y<-[2..floor (sqrt (fromIntegral x))], x `mod` y == 0]
+
+-- Primality tests
+------------------
+
+-- given a number n check if it is prime
+-- using the trial division method
+trial_div :: Int -> Bool
+trial_div n = null [y | y<-[2..floor (sqrt (fromIntegral n))], n `mod` y == 0]
+
+-- given a number n check if it is a fermat pseudoprime
+fermat :: Int -> Bool
+fermat n = foldl (&&) True [ fermat_theorem n a | a<-(rnd (n-1)) ]
+  where
+    fermat_theorem :: Int -> Int -> Bool
+    fermat_theorem n a = mod ((fromIntegral a) ^ (n-1)) (fromIntegral n) == 1
+
+    rnd :: Int -> [Int]
+    rnd x = take (if (x-1)>5 then 5 else (x-1)) (randomRs (1,x) g)
+      where
+        g = mkStdGen 42 -- todo: implement better pseudo randomness
+
+-- given a number n check its primality using
+-- the rabin-miller test (todo)
+
+-- given a number n check its primality using
+-- the lucas lehmer test (todo)
