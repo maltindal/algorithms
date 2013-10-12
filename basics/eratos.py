@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class Primes:
     
     # compute primes up to the number n where n > 2
@@ -13,9 +15,24 @@ class Primes:
 
             return [n for n in r if n != 0]
 
+    # given a sequence of prime numbers calculate the distance
+    # between two prime numbers next to each other
+    def distances(self, ps):
+        return [ps[i+1]-ps[i] for i in range(0, len(ps)-1, 2)]
+
+    def plot(self, n):
+        plt.scatter(range(len(n)), n)
+        plt.show()
+
 if __name__ == "__main__":
     p = Primes()
 
-    print "Sieve primes 2..1000"
-    print p.sieve(1000)
+    n = 10000000
+    ps = p.sieve(n)
 
+    print "Sieve primes 2..%s" % (n)
+    print ps
+
+    print()
+    print "Plotting primes"
+    p.plot(ps)
