@@ -52,7 +52,7 @@ fermat n = and [fermat_theorem n a | a <- rnd 1 (n - 1)]
   where fermat_theorem :: Int -> Int -> Bool
         fermat_theorem n a = mod (fromIntegral a ^ (n - 1)) (fromIntegral n) == 1
 
---  given a the limits a and b of a range [a..b]
+-- given the limits a and b of a range [a..b]
 -- compute a random number in this range
 rnd :: Int -> Int -> [Int]
 rnd a b = take (if (b - 1) > 5 then 5 else b - 1) (randomRs (a, b) g)
