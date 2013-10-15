@@ -56,24 +56,5 @@ fermat n = and [fermat_theorem n a | a <- rnd 1 (n - 1)]
 -- compute a random number in this range
 rnd :: Int -> Int -> [Int]
 rnd a b = take (if (b - 1) > 5 then 5 else b - 1) (randomRs (a, b) g)
-  where g = mkStdGen 42 -- todo: implement better pseudo randomness
+  where g = mkStdGen 42
 
--- given a odd number n > 3 check its primality using the rabin-miller test
--- see Miller, Gary L. (1976),
---     "Riemann's Hypothesis and Tests for Primality",
---     Journal of Computer and System Sciences 13 (3): 300–317
-rabinMiller :: Int -> Bool
-rabinMiller n = and [ chk a | a <- rnd 2 (n - 1)]
-    where
-      s = ceiling (logBase 2 (fromIntegral n - 1))
-      d = div (n - 1) 2
-
-      chk :: Int -> Bool
-      chk a = let x = mod (a ^ d) n
-              in (x == 1 || x == (n - 1)) || chkNext x 1
-      
-      chkNext :: (Integral a) => a -> Int -> Bool
-      chkNext x i
-        | i < (s - 1) = let x = mod (x ^ 2) n
-                        in x /= 1
-        | otherwise = chkNext x (i + 1)
