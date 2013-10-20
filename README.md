@@ -10,3 +10,7 @@ Various algorithms implemented in different languages.
 ### Recursion
 * Factorial function (Haskell)
 * Fibonacci Sequence (Haskell)
+
+### Cryptography
+* Caesar cipher (Haskell)
+* Vigenère cipher (Haskell)
