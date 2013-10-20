@@ -1,5 +1,8 @@
 import Data.Char
 
+-- ciphers
+----------
+
 -- caesar cipher / rot-13
 -- given a text -> key -> alphabet return the encrypted text
 caesarEnc :: String -> Int -> String -> String
@@ -31,19 +34,24 @@ caesarDec t k a = [ dec (sa k a) c | c <- t ]
 vigenèreEnc :: String -> String -> String -> String
 vigenèreEnc t k a = foldl (++) "" 
                     [ caesarEnc [c] (i kc a) a | (c,kc) <- zip t (kt t k) ]
-  where
-    -- given a text t and a key k
-    -- return a list containing pairs of char and its key char
-    kt :: String -> String -> String
-    kt t k = (++) (foldl (++)
-                        ""
-                        (replicate (div (length t) (length k)) k))
-                  (let (r,_) = splitAt (mod (length t) (length k)) k in r)
 
--- TODO implement vigenère decryption function
+-- vigenère cipher
 -- given a text -> key -> alphabet return the decrypted text
---vigenèreDec :: String -> String -> String -> String
---vigenèreDec t k a
+vigenèreDec :: String -> String -> String -> String
+vigenèreDec t k a = [ dec c kc a | (c,kc) <- zip t (kt t k) ]
+  where
+    dec :: Char -> Char -> String -> Char
+    dec c kc a = let (u,_) = head (filter (\x -> let (u,v) = x in v==c)
+                                          (sa (i kc a) a))
+                 in u
+
+-- given a text t and a key k
+-- return a the key at the length of t
+kt :: String -> String -> String
+kt t k = (++) (foldl (++)
+                     ""
+                     (replicate (div (length t) (length k)) k))
+              (let (r,_) = splitAt (mod (length t) (length k)) k in r)
 
 -- given an alphabet shift it k times to the left
 -- and return pairs containing the original and encoded char
@@ -53,11 +61,13 @@ sa k a = let (x,y) = splitAt k a
 
 -- given a char c and a String s which contains c return the index of c
 i :: Char -> String -> Int
-i c s = let (_,n) = head (filter (\x -> let (a,_) = x in a ==c) 
+i c s = let (_,n) = head (filter (\x -> let (a,_) = x in a ==c)
                                  (zip s [0..length s - 1]))
         in n
 
--- crypto analysis
+
+-- cryptanalysis
+----------------
 
 -- given a text t and an alphabet return the decrypted text
 breakCaesar :: String -> String -> String
